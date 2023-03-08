@@ -4,8 +4,84 @@ TAU = 2*pi
 import colorsys
 import os
 
-def create_style(style):
-    test = 0
+
+# set material parameters
+# ['Alpha'][Anisotropic'][Anisotropic Rotation'][Base Color'][Clearcoat'][Clearcoat Normal'][Clearcoat Roughness'][Emission'][Emission Strength'][IOR'][Metallic'][Normal'][Roughness'][Sheen'][Sheen Tint'][Specular'][Specular Tint'][Subsurface'][Subsurface Anisotropy'][Subsurface Color'][Subsurface IOR'][Subsurface Radius'][Tangent'][Transmission'][Transmission Roughness'][Weight']
+
+def material_list(name, color):
+    # transparent materials
+    mat1 = bpy.data.materials.new(name+'_1')
+    mat1.use_nodes = True
+    # remove default nodes tree
+    if mat1.node_tree:
+        mat1.node_tree.links.clear()
+        mat1.node_tree.nodes.clear()
+    # set the name
+    nodes1 = mat1.node_tree.nodes
+    links1 = mat1.node_tree.links
+
+    # create shader
+    shader1 = nodes1.new(type='ShaderNodeBsdfPrincipled')
+    output1 = nodes1.new(type='ShaderNodeOutputMaterial')
+    nodes1["Principled BSDF"].inputs['Base Color'].default_value = color
+    nodes1["Principled BSDF"].inputs['Alpha'].default_value = 0.5
+    nodes1["Principled BSDF"].inputs['Metallic'].default_value = 0.46
+    nodes1["Principled BSDF"].inputs['Roughness'].default_value = 0.1
+
+    # link the shader
+    links1.new(shader1.outputs[0], output1.inputs[0])
+    # create normal Principled BSDF material
+    mat2 = create_material(name+'_2', (0.3, 0.1, 0.06), alpha=1)
+
+    # create glowing materials
+    mat3 = bpy.data.materials.new(name+'_3')
+    mat3.use_nodes = True
+    # remove default nodes tree
+    if mat3.node_tree:
+        mat3.node_tree.links.clear()
+        mat3.node_tree.nodes.clear()
+    # set the name
+    nodes3 = mat3.node_tree.nodes
+    links3 = mat3.node_tree.links
+
+    # create shader
+    shader3a = nodes3.new(type='ShaderNodeBsdfGlass')
+    shader3b = nodes3.new(type='ShaderNodeEmission')
+    output3 = nodes3.new(type='ShaderNodeOutputMaterial')
+
+    nodes3["Glass BSDF"].inputs['Color'].default_value = (0.3, 0.1, 0.06, 1)
+    nodes3["Glass BSDF"].inputs['Roughness'].default_value = 0
+    nodes3["Emission"].inputs['Color'].default_value = color
+    nodes3["Emission"].inputs['Strength'].default_value = 2
+    # link the shader
+    links3.new(shader3a.outputs[0], output3.inputs['Surface'])
+    links3.new(shader3b.outputs[0], output3.inputs['Volume'])
+
+    # create emission materials
+    mat4 = create_material(name+'_4',(0.3, 0.1, 0.06), alpha=1)
+    newShader(name+'_4', 'emission', 0.3, 0.1, 0.06, intensity=10)
+
+    # create subsurface materials
+    mat5 = bpy.data.materials.new(name + '_5')
+    mat5.use_nodes = True
+    # remove default nodes tree
+    if mat5.node_tree:
+        mat5.node_tree.links.clear()
+        mat5.node_tree.nodes.clear()
+    # set the name
+    nodes5 = mat5.node_tree.nodes
+    links5 = mat5.node_tree.links
+
+    # create shader
+    shader5 = nodes5.new(type='ShaderNodeBsdfPrincipled')
+    output5 = nodes5.new(type='ShaderNodeOutputMaterial')
+
+    nodes5["Principled BSDF"].inputs['Base Color'].default_value = color
+    nodes5["Principled BSDF"].inputs['Subsurface'].default_value = 0.5
+
+    # link the shader
+    links5.new(shader5.outputs[0], output5.inputs['Surface'])
+    return {'transparent':mat1,'BSDF':mat2,'glass glowing':mat3,'emission':mat4,'subsurface':mat5}
 
 def remove_object(obj):
     if obj.type == 'MESH':

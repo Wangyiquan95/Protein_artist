@@ -2,7 +2,6 @@
 import bpy
 import time
 import colorsys
-
 from math import sin, cos, pi
 import shutil
 from mathutils import Euler,Vector
@@ -10,7 +9,7 @@ import argparse
 import pymol
 import sys
 import os
-sys.path.append("/Users/yiquan/PycharmProjects/Blender/scripts/")
+
 import utils
 TAU = 2*pi
 def fetch_PDB(id,output,mode='cartoon'):
@@ -49,16 +48,14 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
     # bpy.context.scene.camera = bpy.data.objects['Viewpoint']
     # rename object
     bpy.data.objects['Shape_IndexedFaceSet'].name = 'Surface'
-
-    palette = [(99, 80, 100), (80, 81, 82), (184, 253, 153), (20, 195, 162), (13, 229, 168),
+    # add color palette for background
+    palette = [(255, 255, 255),(99, 80, 100), (80, 81, 82), (0, 0, 0), (184, 253, 153), (20, 195, 162), (13, 229, 168),
                (124, 244, 154), (184, 253, 153)]
     palette = [utils.colorRGB_256(color) for color in palette]
     obj = bpy.data.objects['Surface']
 
-    # create materials for the surface
-    mat = utils.create_material('surface',(0.95, 0.838, 0.838), alpha=0.55,metalic=0.0, roughness=0.5)
     # Apply materials to object
-    obj.data.materials[0] = mat
+    obj.data.materials[0] = materials['subsurface']
 
     # Create object
     bpy.ops.import_scene.x3d(filepath=paths[1])
@@ -66,11 +63,9 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
         bpy.data.objects['Shape_IndexedFaceSet'].name = 'Core'
         obj2 = bpy.data.objects['Core']
 
-        # create materials2
-        mat2 = utils.create_material('core', (0.3, 0.1, 0.06), alpha=1)
 
         # Apply materials to object2
-        obj2.data.materials[0] = mat2
+        obj2.data.materials[0] = materials['BSDF']
     # Deselect all
     bpy.ops.object.select_all(action='DESELECT')
     # select objects
@@ -82,20 +77,14 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
     # delete selected objects
     bpy.ops.object.delete()
 
-
-    # create materials3
-    mat3 = utils.create_material('glowing',(0.3, 0.1, 0.06), alpha=1)
-
-    utils.newShader('glowing', 'emission', 0.3, 0.1, 0.06, intensity=2)
-
     for id in bpy.data.objects.keys():
         if "Shape_Cylinder" in id or "Shape_Sphere" in id:
             bpy.data.objects[id].select_set(True)
-            bpy.data.objects[id].data.materials[0] = mat3
+            bpy.data.objects[id].data.materials[0] = materials['emission']
 
     # Set background color of scene
     bpy.context.scene.world.use_nodes = False
-    bpy.context.scene.world.color = palette[1]
+    bpy.context.scene.world.color = palette[0]
     if quality=='high':
         resolution_x = 2550
         resolution_y = 3300
@@ -114,27 +103,38 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
         render_engine='CYCLES')
 
 if __name__ == '__main__':
-    'usage: render_PDB -i 7cr5'
+    'usage: render_PDB -i 1IGT'
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--id', '-i', type=str, default='7cr5',
+    parser.add_argument('--id', '-i', type=str, default='1IGT',
                         help='PDB ID or PDB_chain')
-    parser.add_argument('--camera_lens', '-lens', type=int, default=30, help='Camera lens. Default 30.')
+    parser.add_argument('--camera_lens', '-lens', type=int, default=18,
+                        help='Camera lens. Default 22.')
+    parser.add_argument('--camera_pos', '-pos', type=int, default=40,
+                        help='Camera position. Default 140.')
+    parser.add_argument('--core_style', '-cs', type=str, default='cartoon',
+                        help='Core structure style.')
+    parser.add_argument('--shell_style', '-ss', type=str, default='surface',
+                        help='Shell structure style.')
     parser.add_argument('--temporary_path', '-tmp', type=str, default='data',
                         help="output file folder name")
-    parser.add_argument('--output_path', '-o', type=str, default='rendering',
+    parser.add_argument('--output_path', '-o', type=str, default='../img',
                         help="output file folder name")
     parser.add_argument('--output_quality', '-q', type=str, default='low',
                         help="output image quality")
     args = parser.parse_args()
 
+    # create a tmp dir to download the structure file
     os.makedirs(args.temporary_path, exist_ok=True)
     os.makedirs(args.output_path, exist_ok=True)
     core = f"{args.temporary_path}/{args.id}_core.wrl"
     surface = f"{args.temporary_path}/{args.id}_surface.wrl"
     if not os.path.isfile(core):
-        fetch_PDB(args.id,core,'cartoon')
+        fetch_PDB(args.id,core, args.core_style)
     if not os.path.isfile(surface):
-        fetch_PDB(args.id, surface, 'surface')
+        fetch_PDB(args.id, surface, args.shell_style)
     paths = [surface,core] # first one is the surface, second is the core
-    render_PDB(paths,(0, 100, 0),22,args.output_path,args.id,args.output_quality)
-    # shutil.rmtree(args.temporary_path)
+    # create material for model
+    mats=utils.material_list('material',(0.47,0.33,1,1))
+    render_PDB(paths,(0,args.camera_pos,0),args.camera_lens,mats,args.output_path,args.id,args.output_quality)
+    # remove tmp dir
+    shutil.rmtree(args.temporary_path)
