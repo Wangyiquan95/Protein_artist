@@ -1,4 +1,4 @@
-# Protein Renderer
+# Protein Artist
 This is a repo for simplely fetching and rendering protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
 
 ## Table of Contents
@@ -73,3 +73,8 @@ renderPDB -i 1IGT -cs ribbon
 renderPDB -i 1IGT -pos 40
 ```
 ![1IGT](/img/1IGT_style4_1.png)
+### Render 2019-nCoV RBD/ACE2-B0AT1 complex
+```
+./renderPDB -i 6M17
+```
+![6M17](/img/6M17.png)
