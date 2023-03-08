@@ -1,4 +1,4 @@
-# protein-artist
+# Protein render
 This is a repo for simplely render fetch and render protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
 
 ## Table of Contents
@@ -17,7 +17,9 @@ This is a repo for simplely render fetch and render protein 3D structure using [
 conda env create -f env.yml
 ```   
 2. Activate conda environment:   
-``source activate blender``
+```
+source activate blender
+```
 
 ## Usages
 before use, set the file access permissions by running
@@ -25,6 +27,7 @@ before use, set the file access permissions by running
 chmod +x renderPDB.py
 ```
 ### Usages ###
+
 usage: ./renderPDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
                      [--camera_pos CAMERA_POS] [--core_style CORE_STYLE]
                      [--shell_style SHELL_STYLE]
@@ -52,4 +55,7 @@ options:
                         
 ## Examples
 ```
-![1IGT](/img/1IGT_style1_1.png) renderPDB -i 1IGT 
+renderPDB -i 1IGT
+```
+
+![1IGT](/img/1IGT_style1_1.png)
