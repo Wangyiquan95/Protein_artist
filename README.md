@@ -1,6 +1,6 @@
 # Protein Renderer
 This is a repo for simplely fetching and rendering protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
-
+![1IGT](/img/1IGT_style1_1.png) ![1IGT](/img/1IGT_style3.png) ![1IGT](/img/1IGT_style4_1.png)
 ## Table of Contents
 - [Dependencies](#dependencies)
 - [Usages](#usages)
@@ -56,8 +56,16 @@ options:
 
 ## Examples
 
+### Render an antibody using default setting
 ```
 renderPDB -i 1IGT
 ```
 
 ![1IGT](/img/1IGT_style1_1.png)
+
+### Render an antibody with different modes
+```
+renderPDB -i 1IGT -cs ribbon
+```
+![1IGT](/img/1IGT_style3.png)
+### Render an antibody with different
