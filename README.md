@@ -22,11 +22,11 @@ source activate blender
 ```
 
 ## Usages
-### first, set the file access permissions by running
+### First, set the file access permissions by running ###
 ```
 chmod +x renderPDB.py
 ```
-### then, refer the usages to run the scripts
+### Then, refer the following usages to run the scripts ###
 ```
 usage: ./renderPDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
                      [--camera_pos CAMERA_POS] [--core_style CORE_STYLE]
@@ -52,8 +52,10 @@ options:
                         output file folder name (default: ../img)
   --output_quality OUTPUT_QUALITY, -q OUTPUT_QUALITY
                         output image quality (default: low)
-```               
+```   
+
 ## Examples
+
 ```
 renderPDB -i 1IGT
 ```
