@@ -1,4 +1,6 @@
 # Protein Artist
+![1IGT](/img/1IGT_style1.png)
+
 This is a repo for simplely fetching and rendering protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
 
 ## Table of Contents
@@ -24,11 +26,11 @@ source activate blender
 ## Usages
 ### First, set the file access permissions by running ###
 ```
-chmod +x renderPDB.py
+chmod +x render_PDB.py
 ```
 ### Then, refer the following usages to run the scripts ###
 ```
-usage: ./renderPDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
+usage: ./render_PDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
                      [--camera_pos CAMERA_POS] [--core_style CORE_STYLE]
                      [--shell_style SHELL_STYLE]
                      [--temporary_path TEMPORARY_PATH]
