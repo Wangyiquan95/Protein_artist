@@ -103,13 +103,13 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
         render_engine='CYCLES')
 
 if __name__ == '__main__':
-    'usage: render_PDB -i 1IGT'
+    'usage: ./render_PDB -i 1IGT'
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--id', '-i', type=str, default='1IGT',
                         help='PDB ID or PDB_chain')
     parser.add_argument('--camera_lens', '-lens', type=int, default=18,
-                        help='Camera lens. Default 22.')
-    parser.add_argument('--camera_pos', '-pos', type=int, default=40,
+                        help='Camera lens. Default 18.')
+    parser.add_argument('--camera_pos', '-pos', type=int, default=140,
                         help='Camera position. Default 140.')
     parser.add_argument('--core_style', '-cs', type=str, default='cartoon',
                         help='Core structure style.')
