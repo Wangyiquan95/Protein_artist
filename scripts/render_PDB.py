@@ -55,7 +55,7 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
     obj = bpy.data.objects['Surface']
 
     # Apply materials to object
-    obj.data.materials[0] = materials['subsurface']
+    obj.data.materials[0] = materials['transparent']
 
     # Create object
     bpy.ops.import_scene.x3d(filepath=paths[1])
