@@ -22,10 +22,11 @@ source activate blender
 ```
 
 ## Usages
-### before use, set the file access permissions by running
+### first, set the file access permissions by running
 ```
 chmod +x renderPDB.py
 ```
+### then, refer the usages to run the scripts
 ```
 usage: ./renderPDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
                      [--camera_pos CAMERA_POS] [--core_style CORE_STYLE]
