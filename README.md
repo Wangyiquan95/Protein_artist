@@ -1,5 +1,5 @@
-# Protein render
-This is a repo for simplely render fetch and render protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
+# Protein Renderer
+This is a repo for simplely fetching and rendering protein 3D structure using [Blender](https://www.blender.org/) Python module bpy.
 
 ## Table of Contents
 - [Dependencies](#dependencies)
@@ -27,7 +27,7 @@ before use, set the file access permissions by running
 chmod +x renderPDB.py
 ```
 ### Usages ###
-
+```
 usage: ./renderPDB.py [-h] [--id ID] [--camera_lens CAMERA_LENS]
                      [--camera_pos CAMERA_POS] [--core_style CORE_STYLE]
                      [--shell_style SHELL_STYLE]
@@ -52,7 +52,7 @@ options:
                         output file folder name (default: ../img)
   --output_quality OUTPUT_QUALITY, -q OUTPUT_QUALITY
                         output image quality (default: low)
-                        
+```               
 ## Examples
 ```
 renderPDB -i 1IGT
