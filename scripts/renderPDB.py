@@ -32,7 +32,7 @@ def fetch_PDB(id,output,mode='cartoon'):
     pymol.cmd.save(output)
     pymol.cmd.delete('all')
 
-def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_name,quality='medium'):
+def renderPDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_name,quality='medium'):
     # Remove all elements
     utils.remove_all()
 
@@ -103,7 +103,7 @@ def render_PDB(paths,camera_coordinates,camera_lens,materials,output_dir,output_
         render_engine='CYCLES')
 
 if __name__ == '__main__':
-    'usage: ./render_PDB -i 1IGT'
+    'usage: ./renderPDB -i 1IGT'
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--id', '-i', type=str, default='1IGT',
                         help='PDB ID or PDB_chain')
