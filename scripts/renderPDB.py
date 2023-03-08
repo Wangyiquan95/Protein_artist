@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 import bpy
 import time
-import colorsys
-from math import sin, cos, pi
 import shutil
-from mathutils import Euler,Vector
 import argparse
 import pymol
 import sys
 import os
-
 import utils
-TAU = 2*pi
-def fetch_PDB(id,output,mode='cartoon'):
+
+def fetchPDB(id,output,mode='cartoon'):
     pymol.cmd.bg_color('white')
     pymol.cmd.viewport('2000', '2000')
     pymol.cmd.fetch(id)
@@ -129,12 +125,12 @@ if __name__ == '__main__':
     core = f"{args.temporary_path}/{args.id}_core.wrl"
     surface = f"{args.temporary_path}/{args.id}_surface.wrl"
     if not os.path.isfile(core):
-        fetch_PDB(args.id,core, args.core_style)
+        fetchPDB(args.id,core, args.core_style)
     if not os.path.isfile(surface):
-        fetch_PDB(args.id, surface, args.shell_style)
+        fetchPDB(args.id, surface, args.shell_style)
     paths = [surface,core] # first one is the surface, second is the core
     # create material for model
     mats=utils.material_list('material',(0.47,0.33,1,1))
-    render_PDB(paths,(0,args.camera_pos,0),args.camera_lens,mats,args.output_path,args.id,args.output_quality)
+    renderPDB(paths,(0,args.camera_pos,0),args.camera_lens,mats,args.output_path,args.id,args.output_quality)
     # remove tmp dir
     shutil.rmtree(args.temporary_path)
